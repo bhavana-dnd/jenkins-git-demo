@@ -4,29 +4,31 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code from Git'
+                git branch: 'main',
+                    url: 'https://github.com/bhavana-dnd/jenkins-git-demo.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the application'
+                bat 'javac HelloCI.java'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing the application'
+                bat 'java HelloCI'
             }
         }
     }
 
     post {
         success {
-            echo 'BUILD SUCCESSFUL'
+            archiveArtifacts artifacts: '*.class'
+            echo 'CI PIPELINE SUCCESSFUL'
         }
         failure {
-            echo 'BUILD FAILED'
+            echo 'CI PIPELINE FAILED'
         }
     }
 }
